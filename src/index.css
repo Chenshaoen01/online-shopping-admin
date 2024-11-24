@@ -1,0 +1,335 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.body-container {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+}
+@media (max-width: 992px) {
+  .body-container {
+    padding-top: 77px;
+  }
+}
+
+.sidebar-area {
+  width: 250px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  border-style: solid;
+  border-color: #CCCCCC;
+  border-width: 0 1px 0 0;
+}
+
+@media (max-width: 992px) {
+  .sidebar-area {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    border-width: 0;
+  }
+}
+
+.sidebar-account-area {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('/public/images/gray-bg.png');
+}
+@media (max-width: 992px) {
+  .sidebar-account-area {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.sidebar-logo-img {
+  width: 100px;
+  height: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+@media (max-width: 992px) {
+  .sidebar-logo-img {
+    width: 45px;
+    height: auto;
+    margin: 0 15px 0 0;
+  }
+}
+
+.hambur-icon {
+  display: none;
+}
+@media (max-width: 992px) {
+  .hambur-icon {
+    display: block;
+    width: 30px;
+    cursor: pointer;
+  }
+}
+
+.sidebar-linklist-area {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+@media (max-width: 992px) {
+  .sidebar-linklist-area {
+    display: none;
+  }
+
+  .sidebar-linklist-area.active {
+    display: flex;
+    border-style: solid;
+    border-color: #CCCCCC;
+    border-width: 0 0 1px 0;
+  }
+}
+
+.sidebar-link-item {
+  display: flex;
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-link-item-img {
+  width: 25px;
+  height: auto;
+  margin-right: 1rem;
+}
+
+.main-conteant-area {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: white;
+}
+
+.main-conteant-header {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-conteant-footer {
+  margin: auto 2rem 2rem 1rem;
+  display: flex;
+  justify-content: end;
+}
+
+/* 表格區域 */
+.data-list-table thead th {
+  background-color: #EFEFEF;
+  padding: 0.5rem;
+}
+
+.data-list-table tbody td {
+  padding: 0.25rem;
+  text-align: center;
+  border-style: solid;
+  border-color: #CCCCCC;
+  border-width: 0 0 1px 0;
+}
+
+.page-button {
+  width: 25px;
+  height: 25px;
+  margin: 0 0.25rem;
+  text-align: center;
+  border: solid 1px black;
+  color: black;
+}
+
+.page-button.active {
+  background-color: #C9A27F;
+  color: white;
+}
+
+.page-button-dots:before {
+  content: "...";
+  display: block;
+  line-height: 25px;
+  margin: 0 0.25rem 0.5rem 0.25rem;
+}
+
+.page-button-pre:before {
+  content: "<";
+}
+
+.page-button-next:before {
+  content: ">";
+}
+
+/* 行動版清單細項物件卡片 */
+.list-item-card {
+  border: solid 1px #CCCCCC;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.list-item-content-table tbody tr td:first-child{
+  padding-right: 1rem;
+}
+
+/* 資料列表 圖片卡片 */
+.data-img-card {
+  height: 200px;
+  border: solid 1px #CCCCCC;
+  border-radius: 5px;
+  padding: 1rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* 表單樣式 */
+.form-label {
+  margin-bottom: 1rem;
+}
+.form-title {
+  display: inline-block;
+  min-width: 100px;  
+  margin-right: 2rem;
+}
+.form-input,
+.form-input:focus {
+  width: 200px;
+  height: 32px;
+  padding: 0.25rem;
+  border: solid 1px #CCCCCC;
+  outline: none;
+}
+
+.form-input-lg,
+.form-input-lg:focus {
+  width: 100%;
+}
+
+.form-textarea,
+.form-textarea:focus {
+  height: 150px;
+  padding: 0.25rem;
+  border: solid 1px #CCCCCC;
+  outline: none;
+}
+
+/* modal內樣式 */
+.modal-sub-img {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  width: 150px;
+  height: 150px;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.modal-sub-img-lg {
+  width: 250px;
+  height: auto;
+}
+
+.subdata-card {
+  border: solid 1px #CCCCCC;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
+}
+
+/* alertify 樣式 */
+.ajs-footer {
+  display: none;
+}
+
+/* ScrollBar */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px white; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #E9D9C0; 
+  border-radius: 10px;
+}
+
+/* 通用元件/樣式 */
+.devider {
+  width: 100%;
+  border: solid 1px #CCCCCC;
+}
+
+.required-column::before {
+   content: "*";
+   color: red;
+   size: 20px;
+   margin-right: 0.25rem;
+}
+
+.button-primary {
+  background-color: #E9D9C0;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+.button-primary-lg {
+  padding: 0.25rem 1rem;
+}
+
+.button-transparent {
+  background-color: transparent;
+  color: #C9A27F;
+}
+
+.edit-button, .edit-button-lg,  .delete-button, .delete-button-lg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.delete-button, .delete-button-lg {
+  background-image: url('/public/images/cross-icon.png');
+}
+
+.edit-button, .edit-button-lg {
+  background-image: url('/public/images/edit-icon.png');
+}
+
+.edit-button, .delete-button {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-button-lg, .delete-button-lg {
+  width: 24px;
+  height: 24px;
+}
