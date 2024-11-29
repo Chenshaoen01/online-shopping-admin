@@ -140,6 +140,106 @@ code {
   justify-content: end;
 }
 
+/* 登入頁面 */
+.userpage-form-background-area {
+  width: 100%;
+  min-height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 30% center;
+  background-image: url('/public/images/bg-login.png');
+}
+
+.userpage-form-area-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #FFEDD0;
+  position: relative;
+}
+
+.userpage-form-area {
+  width: 250px;
+  min-height: 100vh;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userpage-form-area-container:before {
+  width: 75px;
+  min-height: 100vh;
+  content: "";
+  background-color: #FFEDD0;
+  clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+  position: absolute;
+  left: 1px;
+  top: 0;
+  transform: translateX(-100%);
+}
+
+.userpage-form-title-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-style: solid;
+  border-color: #E9D9C0;
+  border-width: 0 0 2px 0;
+}
+
+.userpage-logo {
+  width: 75px;
+  height: auto;
+}
+
+.userpage-form-input {
+  width: 100%;
+  background-color: white;
+  border: solid 1px #aaaaaa;
+}
+
+.userpage-form-button {
+  display: block;
+  width: 100%;
+  background-color: #E9D9C0;
+  border: none;
+  padding: 0.25rem 0;
+}
+
+@media (max-width: 767px) {
+  .userpage-form-area-container {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 30% center;
+    background-image: url('/public/images/bg-login.png');
+  }
+}
+
+/* 首頁 */
+.homepage-link-card {
+  width: 100%;
+  aspect-ratio: 1/1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #E9D9C0;
+  border-radius: 16px;
+}
+
+.homepage-link-card-icon {
+  width: 50px;
+  margin-bottom: 1rem;
+}
+
+.homepage-link-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 /* 表格區域 */
 .data-list-table thead th {
   background-color: #EFEFEF;

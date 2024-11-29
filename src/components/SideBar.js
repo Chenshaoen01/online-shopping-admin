@@ -7,7 +7,9 @@ export default () => {
     return <div className="sidebar-area">
         <div className="sidebar-account-area">
             <div className="flex flex-row lg:flex-col items-center">
-                <img className="sidebar-logo-img" src="/images/logo1.png"></img>
+                <Link to="/">
+                    <img className="sidebar-logo-img" src="/images/logo1.png"></img>
+                </Link>
                 <div>毛孩物坊後台管理系統</div>
             </div>
             <div className="hidden lg:flex flex-col">
@@ -18,6 +20,10 @@ export default () => {
             <img className="hambur-icon" src="/images/menu-burger.svg" onClick={() => {setIsExpanded(!isExpanded)}}></img>
         </div>
         <div className={isExpanded? "sidebar-linklist-area active" : "sidebar-linklist-area"}>
+            <Link to="/admin/param" className="sidebar-link-item">
+                <img className="sidebar-link-item-img" src="/images/param-icon.png"></img>
+                <span>基本資料設定</span>
+            </Link>
             <Link to="/admin/order" className="sidebar-link-item">
                 <img className="sidebar-link-item-img" src="/images/cart-icon.png"></img>
                 <span>訂單管理系統</span>

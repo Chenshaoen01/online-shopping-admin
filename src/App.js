@@ -1,6 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
+import Parameter from './pages/Parameter';
 import Login from './pages/Login';
+import Home from './pages/Home';
 import AdminLayout from './components/AdminLayout';
 import Product from './pages/Product';
 import ProductCategory from './pages/ProductCategory';
@@ -16,7 +17,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/login' element={<Login />}></Route>
-          <Route path='/admin' element={<AdminLayout />}>
+          <Route path='/' element={<AdminLayout />}>
+            <Route path='/' element={<Home />}></Route>
+            <Route path='/admin/param' element={<Parameter />}></Route>
             <Route path='/admin/product' element={<Product />}></Route>
             <Route path='/admin/productCategory' element={<ProductCategory />}></Route>
             <Route path='/admin/question' element={<Question />}></Route>
