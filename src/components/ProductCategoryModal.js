@@ -11,7 +11,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
 
     // 驗證
     const validate = () => {
-        // 商品資訊驗證
         const validateColumn = [
             { columnName: 'category_id', columnChName: "類別編號" },
             { columnName: 'category_name', columnChName: "類別名稱" }

@@ -1,25 +1,59 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+
+import axios from "axios"
 
 export default () => {
+    const [userEmail, setUserEmail] = useState('')
+    const [userName, setUserName] = useState('')
     const [isExpanded, setIsExpanded] = useState(false)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        updateUserInfo()
+    }, [])
+
+    const updateUserInfo = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}/users/getUserInfo`)
+            .then(res => {
+                setUserEmail(res.data.user_email)
+                setUserName(res.data.user_name)
+
+                setTimeout(updateUserInfo, 2000)
+            })
+            .catch(err => {
+                navigate("/login")
+            })
+    }
+
+    const logOut = () => {
+        axios.post(`${process.env.REACT_APP_API_URL}/users/logout`)
+            .then(res => {
+                document.cookie = 'csrfToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                navigate("/login")
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    };
 
     return <div className="sidebar-area">
         <div className="sidebar-account-area">
-            <div className="flex flex-row lg:flex-col items-center">
+            <div className="system-title-area">
                 <Link to="/">
                     <img className="sidebar-logo-img" src="/images/logo1.png"></img>
                 </Link>
                 <div>毛孩物坊後台管理系統</div>
             </div>
-            <div className="hidden lg:flex flex-col">
+            <div className="pc-user-info">
                 <div className="devider my-4"></div>
-                <div>管理員1</div>
-                <div>admin@example.com</div>
+                <div>{userName}</div>
+                <div>{userEmail}</div>
             </div>
-            <img className="hambur-icon" src="/images/menu-burger.svg" onClick={() => {setIsExpanded(!isExpanded)}}></img>
+            <button type="button" className="log-out-button" onClick={() => { logOut() }}>登出</button>
+            <img className="hambur-icon" src="/images/menu-burger.svg" onClick={() => { setIsExpanded(!isExpanded) }}></img>
         </div>
-        <div className={isExpanded? "sidebar-linklist-area active" : "sidebar-linklist-area"}>
+        <div className={isExpanded ? "sidebar-linklist-area active" : "sidebar-linklist-area"}>
             <Link to="/admin/param" className="sidebar-link-item">
                 <img className="sidebar-link-item-img" src="/images/param-icon.png"></img>
                 <span>基本資料設定</span>
@@ -44,6 +78,13 @@ export default () => {
                 <img className="sidebar-link-item-img" src="/images/image-icon.png"></img>
                 <span>首頁輪播設定</span>
             </Link>
+            <div className="mobile-user-info">
+                <div className="flex flex-col">
+                    <div>{userName}</div>
+                    <div>{userEmail}</div>
+                </div>
+                <button type="button" className="button-primary" onClick={() => { logOut() }}>登出</button>
+            </div>
         </div>
     </div>
 }

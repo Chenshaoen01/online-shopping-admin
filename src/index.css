@@ -36,13 +36,47 @@ code {
   border-color: #CCCCCC;
   border-width: 0 1px 0 0;
 }
-
 @media (max-width: 992px) {
   .sidebar-area {
     width: 100%;
     position: fixed;
     top: 0;
     border-width: 0;
+  }
+}
+
+.system-title-area {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+@media (max-width: 992px) {
+  .system-title-area {
+     flex-direction: row;
+  }
+}
+
+.pc-user-info {
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 992px) {
+  .pc-user-info {
+    display: none;
+  }
+}
+
+.mobile-user-info {
+  display: none;
+}
+@media (max-width: 992px) {
+  .mobile-user-info {
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 1px;
+    border-width: 1px 0 0 0;
   }
 }
 
@@ -76,6 +110,19 @@ code {
     width: 45px;
     height: auto;
     margin: 0 15px 0 0;
+  }
+}
+
+.log-out-button {
+  margin-top: 8px;
+  background-color: #C9A27F;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+@media (max-width: 992px) {
+  .log-out-button {
+    display: none;
   }
 }
 

@@ -35,7 +35,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
 
     // 驗證
     const validate = () => {
-        // 商品資訊驗證
         const validateColumn = [
             { columnName: 'banner_sort', columnChName: "輪播圖片排序" }
         ]
