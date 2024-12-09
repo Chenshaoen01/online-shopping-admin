@@ -42,7 +42,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                     model_name: "",
                     model_price: 0,
                     product_id: "",
-                    model_quantity: 0
                 }
             ]
         })
@@ -108,7 +107,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         // 規格資訊驗證
         const modelValidateColumn = [
             { columnName: 'model_name', columnChName: "規格名稱" },
-            { columnName: 'model_quantity', columnChName: "規格庫存量" },
             { columnName: 'model_price', columnChName: "規格售價" },
         ]
         const modelInValidColumnList = modelValidateColumn.reduce((accumulator, currentColumn) => {
@@ -285,14 +283,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                                             <input type="text" className="form-input form-input-lg"
                                                 value={model.model_name}
                                                 onChange={(e) => { setModelData(e.target.value, modelIndex, 'model_name') }}></input>
-                                        </label>
-                                    </div>
-                                    <div className="col-span-12 md:col-span-6">
-                                        <label className="form-label flex items-center mb-2">
-                                            <span className="form-title required-column">庫存量</span>
-                                            <input type="number" className="form-input form-input-lg"
-                                                value={model.model_quantity}
-                                                onChange={(e) => { setModelData(e.target.value, modelIndex, 'model_quantity') }}></input>
                                         </label>
                                     </div>
                                     <div className="col-span-12 md:col-span-6">

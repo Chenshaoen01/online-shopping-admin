@@ -26,7 +26,6 @@ export default () => {
         { columnName: 'category_name', columnChName: "商品類別" },
         { columnName: 'product_price', columnChName: "商品售價" },
         { columnName: 'is_active', columnChName: "是否上架" },
-        { columnName: 'product_quantity', columnChName: "庫存量" },
     ])
     const [dataListActions] = useState(['edit', 'delete'])
 

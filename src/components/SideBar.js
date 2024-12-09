@@ -14,7 +14,7 @@ export default () => {
     }, [])
 
     const updateUserInfo = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/users/getUserInfo`)
+        axios.get(`${process.env.REACT_APP_API_URL}/users/getAdminUserInfo`)
             .then(res => {
                 setUserEmail(res.data.user_email)
                 setUserName(res.data.user_name)

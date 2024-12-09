@@ -22,7 +22,6 @@ export default () => {
     const [modalData, setModalData] = useState({})
     const [columnList] = useState([
         { columnName: 'param_id', columnChName: "參數編號" },
-        { columnName: 'param_content', columnChName: "參數內容" },
     ])
     const [dataListActions] = useState(['edit', 'delete'])
 
