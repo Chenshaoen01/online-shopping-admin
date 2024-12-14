@@ -1,10 +1,11 @@
+import { useCallback } from "react"
+
 export default ({ MicroModal, modalName, columnList, mainIdColumnName, dataList, dataListActions, setDataList, getDetailData, doDelete }) => {
-    const setDataChecked = (isChekedValue, dataIndex) => {
+    const setDataChecked = useCallback((isChekedValue, dataIndex) => {
         const newDataLst = [...dataList]
         newDataLst[dataIndex].isChecked = isChekedValue
-        console.log(isChekedValue)
         setDataList(newDataLst)
-    }
+    }, [dataList])
 
     const isActionButtonExist = ((targetAction) => dataListActions.some(action => action === targetAction))
     return <>

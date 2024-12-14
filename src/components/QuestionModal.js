@@ -1,16 +1,17 @@
 import axios from "axios"
 import alertify from "alertifyjs"
+import { useCallback } from "react"
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
     // 產品資料 編輯
-    const setQuestion = (newValue, columnName) => {
-        const newModalData = { ...modalData }
-        newModalData[columnName] = columnName === 'is_active' ? parseInt(newValue) : newValue
-        setModalData(newModalData)
-    }
+    const setQuestion = useCallback((newValue, columnName) => {
+        setModalData((pre) => {
+            return { ...pre, [columnName]: newValue }
+        })
+    }, [modalData])
 
     // 驗證
-    const validate = () => {
+    const validate = useCallback(() => {
         const validateColumn = [
             { columnName: 'question_sort', columnChName: "排序" },
             { columnName: 'question_title', columnChName: "問題" },
@@ -25,10 +26,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         }, [])
 
         return inValidColumnList
-    }
+    }, [modalData])
 
     // 存檔
-    const doSave = async () => {
+    const doSave = useCallback(async () => {
         const inValidColumnList = validate()
         if (inValidColumnList.length > 0) {
             let isFistItem = true
@@ -46,21 +47,22 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/question/${modalData.question_id}` : `${process.env.REACT_APP_API_URL}/question`,
                 data: postModalData
             }).then(res => {
-                alertify.alert("", "儲存成功")
-                
+                const responseMessage = res?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 MicroModal.close("question-modal")
                 getDataList()
             })
             .catch(err => {
-                alertify.alert("", "儲存失敗")
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存失敗")
                 console.log(err)
             })
         }
-    }
+    }, [modalData])
 
     return <>
         <div className="modal micromodal-slide" id="question-modal" aria-hidden="true">
-            <div className="modal__overlay" data-micromodal-close>
+            <div className="modal__overlay">
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="question-modal-title">
                     <header className="modal__header">
                         <h2 className="modal__title" id="question-modal-title">

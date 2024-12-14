@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import OrderModal from "../components/OrderModal.js";
@@ -35,7 +35,7 @@ export default () => {
         getDataList()
     }, [currentPage])
 
-    const getDataList = () => {
+    const getDataList = useCallback(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/order?page=${currentPage}`)
             .then((res) => {
                 if (Array.isArray(res.data.dataList)) {
@@ -52,10 +52,10 @@ export default () => {
             .catch((err) => {
                 console.log(err)
             })
-    }
+    }, [currentPage])
 
     // 取得單一資料詳細資料
-    const getDetailData = (dataId) => {
+    const getDetailData = useCallback((dataId) => {
         setIsEdit(true)
         if (dataId !== undefined) {
             axios.get(`${process.env.REACT_APP_API_URL}/order/${dataId}`)
@@ -68,41 +68,45 @@ export default () => {
                     console.log(err)
                 })
         }
-    }
+    }, [])
 
     // 改變訂單狀態
-    const changeOrderStatus = (action) => {
+    const changeOrderStatus = useCallback((action) => {
         const selectedIdList = dataList.filter(data => data.isChecked).map(data => data.order_id)
         if (selectedIdList.length > 0) {
             axios.put(`${process.env.REACT_APP_API_URL}/order/orderStatus`, { order_ids: selectedIdList, order_status: action })
                 .then((res) => {
-                    alertify.alert("", "訂單狀態調整成功")
+                    const responseMessage = res?.data?.message
+                    alertify.alert("", responseMessage? responseMessage : "訂單狀態調整成功")
                     getDataList()
                 })
                 .catch((err) => {
-                    alertify.alert("", "訂單狀態調整失敗")
+                    const responseMessage = err.response?.data?.message
+                    alertify.alert("", responseMessage? responseMessage : "訂單狀態調整失敗")
                     console.log(err)
                 })
         }
-    }
+    }, [dataList])
     // 刪除
     const deleteCheckedItems = () => {
         const deletedIdList = dataList.filter(data => data.isChecked).map(data => data.order_id)
         doDelete(deletedIdList)
     }
-    const doDelete = (deletedIdList) => {
+    const doDelete = useCallback((deletedIdList) => {
         if (deletedIdList.length > 0) {
             axios.delete(`${process.env.REACT_APP_API_URL}/order`, { data: { order_ids: deletedIdList } })
                 .then((res) => {
-                    alertify.alert("", "刪除成功")
+                    const responseMessage = res?.data?.message
+                    alertify.alert("", responseMessage? responseMessage : "刪除成功")
                     getDataList()
                 })
                 .catch((err) => {
-                    alertify.alert("", "刪除失敗")
+                    const responseMessage = err.response?.data?.message
+                    alertify.alert("", responseMessage? responseMessage : "刪除失敗")
                     console.log(err)
                 })
         }
-    }
+    }, [])
 
     return <>
         <div className="main-conteant-header">

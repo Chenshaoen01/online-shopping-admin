@@ -184,8 +184,9 @@ code {
 
 .main-conteant-footer {
   margin: auto 2rem 2rem 1rem;
+  padding-top: 2rem;
   display: flex;
-  justify-content: end;
+  justify-content: center;
 }
 
 /* 登入頁面 */
@@ -256,12 +257,15 @@ code {
 }
 
 @media (max-width: 767px) {
-  .userpage-form-area-container {
-    background-color: transparent;
+  .userpage-main-content-area {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 30% center;
     background-image: url('/public/images/bg-login.png');
+  }
+
+  .userpage-form-area-container {
+    background-color: rgba(255, 255, 255, 0.75);
   }
 }
 

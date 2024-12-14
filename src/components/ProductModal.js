@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import alertify from "alertifyjs"
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
+    // 取得商品種類列表
     const [categoryList, setCategoryList] = useState([])
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/productCategory/getAll`)
@@ -20,56 +21,62 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
     }, [])
 
     // 產品資料 編輯
-    const setProductData = (newValue, columnName) => {
-        const newModalData = { ...modalData }
-        newModalData[columnName] = columnName === 'is_active' || columnName === 'is_recommended' ? parseInt(newValue) : newValue
-        setModalData(newModalData)
-    }
+    const setProductData = useCallback((newValue, columnName) => {
+        setModalData((pre) => {
+            return { ...pre, [columnName]: columnName === 'is_active' || columnName === 'is_recommended' ? parseInt(newValue) : newValue }
+        })
+    }, [modalData])
 
-    // 規格資料 編輯/新增/刪除
-    const setModelData = (newValue, modelIndex, columnName) => {
+    // 款式資料 編輯/新增/刪除
+    const setModelData = useCallback((newValue, modelIndex, columnName) => {
         const newModelList = [...modalData.models]
         newModelList[modelIndex][columnName] = newValue
         setModalData({ ...modalData, models: newModelList })
-    }
-    const addModel = () => {
-        setModalData({
-            ...modalData,
-            models: [
-                ...modalData.models,
-                {
-                    model_id: "",
-                    model_name: "",
-                    model_price: 0,
-                    product_id: "",
-                }
-            ]
+    }, [modalData])
+    const addModel = useCallback(() => {
+        setModalData(pre => {
+            return {
+                ...pre,
+                models: [
+                    ...pre.models,
+                    {
+                        model_id: "",
+                        model_name: "",
+                        model_price: 0,
+                        product_id: "",
+                    }
+                ]
+            }
         })
-    }
-    const deleteModel = (deletedModelIndex) => {
-        setModalData({
-            ...modalData,
-            models: modalData.models.filter((model, modelIndex) => deletedModelIndex !== modelIndex)
+    }, [modalData])
+    const deleteModel = useCallback((deletedModelIndex) => {
+        setModalData(pre => {
+            return {
+                ...pre,
+                models: pre.models.filter((model, modelIndex) => deletedModelIndex !== modelIndex)
+            }
         })
-    }
+    }, [modalData])
 
     // 圖片 新增/刪除/上傳
     const [newImages, setNewImages] = useState([])
-    const addImage = (newImageFile) => {
-        setNewImages([...newImages, {
-            file: newImageFile,
-            url: URL.createObjectURL(newImageFile)
-        }])
-    }
-    const deleteNewImage = (deletedNewImageIndex) => {
-        setNewImages(newImages.filter((image, imageIndex) => deletedNewImageIndex !== imageIndex))
-    }
-    const deleteImage = (deletedImageIndex) => {
+    const addImage = useCallback((newImageFile) => {
+        setNewImages(pre => {
+            return [...pre, {
+                file: newImageFile,
+                url: URL.createObjectURL(newImageFile)
+            }]
+        })
+    }, [newImages])
+    const deleteNewImage = useCallback((deletedNewImageIndex) => {
+        setNewImages(pre => pre.filter((image, imageIndex) => deletedNewImageIndex !== imageIndex))
+    }, [newImages])
+    const deleteImage = useCallback((deletedImageIndex) => {
         const modifiedImages = [...modalData.images]
         modifiedImages[deletedImageIndex].state = "Deleted"
         setModalData({ ...modalData, images: modifiedImages })
-    }
-    const uploadImage = async (imageFile) => {
+    }, [modalData])
+    const uploadImage = useCallback(async () => {
         const uploadResult = []
         const UploadRequest = newImages.map((image) => {
             const postFormData = new FormData()
@@ -84,10 +91,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         })
         await Promise.all(UploadRequest)
         return uploadResult
-    }
+    }, [newImages])
 
     // 驗證
-    const validate = () => {
+    const validate = useCallback(() => {
         // 商品資訊驗證
         const validateColumn = [
             { columnName: 'product_name', columnChName: "商品名稱" },
@@ -104,10 +111,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             return accumulator
         }, [])
 
-        // 規格資訊驗證
+        // 款式資訊驗證
         const modelValidateColumn = [
-            { columnName: 'model_name', columnChName: "規格名稱" },
-            { columnName: 'model_price', columnChName: "規格售價" },
+            { columnName: 'model_name', columnChName: "款式名稱" },
+            { columnName: 'model_price', columnChName: "款式售價" },
         ]
         const modelInValidColumnList = modelValidateColumn.reduce((accumulator, currentColumn) => {
             const isInValid = modalData.models.some(model => {
@@ -121,25 +128,17 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         }, [])
 
         return [...inValidColumnList, ...modelInValidColumnList]
-    }
+    }, [modalData])
 
     // 存檔
-    const doSave = async () => {
+    const doSave = useCallback(async () => {
         const hasModel = modalData.models.length > 0
         const inValidColumnList = validate()
         if (inValidColumnList.length > 0 || !hasModel) {
-            const inValidModelString = hasModel? "" : "商品需包含至少一種規格"
+            const inValidModelString = hasModel? "" : "商品需包含至少一種款式"
 
-            let inValidString = ""
-            if(inValidColumnList.length > 0) {
-                let isFistItem = true
-                inValidString += inValidColumnList.reduce((accumulator, currentInVliadColumn) => {
-                    accumulator = `${accumulator}${isFistItem? "" : "、"}${currentInVliadColumn}`
-                    isFistItem = false
-                    return accumulator
-                }, "")
-                inValidString += "為必填項目"
-            }
+            let inValidString = inValidColumnList.join("、")
+            inValidString += "為必填項目"
 
             alertify.alert("", `${inValidModelString}${inValidModelString !== "" && inValidString !== ""? "，": ""}${inValidString}`)
         } else {
@@ -153,30 +152,30 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                     product_img_id: "",
                     state: "Added"
                 })
-
             })
-
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/product/${modalData.product_id}` : `${process.env.REACT_APP_API_URL}/product`,
                 data: postModalData
             }).then(res => {
-                alertify.alert("", "儲存成功")
+                const responseMessage = res?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 
                 MicroModal.close("product-modal")
                 setNewImages([])
                 getDataList()
             })
             .catch(err => {
-                alertify.alert("", "儲存失敗")
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存失敗")
                 console.log(err)
             })
         }
-    }
+    }, [modalData, isEdit, newImages])
 
     return <>
         <div className="modal micromodal-slide" id="product-modal" aria-hidden="true">
-            <div className="modal__overlay" data-micromodal-close>
+            <div className="modal__overlay">
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
                     <header className="modal__header">
                         <h2 className="modal__title" id="product-modal-title">
@@ -266,20 +265,22 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                             }
                         </div>
                         <div className="devider my-4"></div>
-                        {/* 規格 */}
+                        {/* 款式 */}
                         <div className="flex justify-between mb-4">
-                            <span className="">商品規格</span>
+                            <span className="">商品款式</span>
                             <button type="button" className="button-primary button-primary-lg px-4"
-                                onClick={() => { addModel() }}>新增規格</button>
+                                onClick={() => { addModel() }}>新增款式</button>
                         </div>
                         <div className="flex flex-col">
                             {modalData.models?.map((model, modelIndex) => (
                             <div className="subdata-card mb-4" key={model.model_id}>
-                                <div className="flex justify-end mb-2 cursor-pointer" onClick={() => { deleteModel(modelIndex) }}>X</div>
+                                <div className="flex justify-end mb-2">
+                                    <button type="button" onClick={() => { deleteModel(modelIndex) }}>X</button>
+                                </div>
                                 <div className="grid grid-cols-12 gap-x-2">
                                     <div className="col-span-12">
                                         <label className="form-label flex items-center mb-2">
-                                            <span className="form-title required-column">規格名稱</span>
+                                            <span className="form-title required-column">款式名稱</span>
                                             <input type="text" className="form-input form-input-lg"
                                                 value={model.model_name}
                                                 onChange={(e) => { setModelData(e.target.value, modelIndex, 'model_name') }}></input>

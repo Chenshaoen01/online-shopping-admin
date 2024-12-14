@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import ProductModal from "../components/ProductModal.js";
@@ -50,7 +50,7 @@ export default () => {
         getDataList()
     }, [currentPage])
 
-    const getDataList =() => {
+    const getDataList = useCallback(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/product?page=${currentPage}`)
         .then((res) => {
             if(Array.isArray(res.data.dataList)) {
@@ -67,14 +67,15 @@ export default () => {
         .catch((err) => {
             console.log(err)
         })
-    }
+    }, [currentPage])
 
     // 取得單一資料詳細資料
-    const getDetailData =(productId) => {
-        setIsEdit(true)
+    const getDetailData = useCallback((productId) => {
+        clearModalData()
         if(productId !== undefined) {
             axios.get(`${process.env.REACT_APP_API_URL}/product/${productId}`)
             .then((res) => {
+                setIsEdit(true)
                 if(res.data) {
                     setModalData(res.data)
                 }
@@ -83,42 +84,46 @@ export default () => {
                 console.log(err)
             })
         }
-    }
+    }, [])
 
     // 刪除
     const deleteCheckedItems = () => {
         const deletedIdList = dataList.filter(data => data.isChecked).map(data => data.product_id)
         doDelete(deletedIdList)
     }
-    const doDelete =(deletedIdList) => {
+    const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
             axios.delete(`${process.env.REACT_APP_API_URL}/product`, {data:{product_ids: deletedIdList}})
             .then((res) => {
-                alertify.alert("", "刪除成功")
+                const responseMessage = res?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "刪除成功")
                 getDataList()
             })
             .catch((err) => {
-                alertify.alert("", "刪除失敗")
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "刪除失敗")
                 console.log(err)
             })
         }
-    }
+    }, [])
 
     // 上架/下架
-    const doActiveEdit =(isActive) => {
+    const doActiveEdit = useCallback((isActive) => {
         const editedIdList = dataList.filter(data => data.isChecked).map(data => data.product_id)
         if(editedIdList.length > 0) {
             axios.post(`${process.env.REACT_APP_API_URL}/product/update-active-status`, {product_ids: editedIdList, isActive: isActive})
             .then((res) => {
-                alertify.alert("", `${isActive? "上架":"下架"}成功`)
+                const responseMessage = res?.data?.message
+                alertify.alert("", responseMessage? responseMessage : `${isActive? "上架":"下架"}成功`)
                 getDataList()
             })
             .catch((err) => {
-                alertify.alert("", `${isActive? "上架":"下架"}失敗`)
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : `${isActive? "上架":"下架"}失敗`)
                 console.log(err)
             })
         }
-    }
+    }, [dataList])
 
     return <>
         <div className="main-conteant-header">

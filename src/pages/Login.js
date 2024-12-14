@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import alertify from 'alertifyjs';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Login() {
     const navigate = useNavigate()
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [isRemember, setIsRemember] = useState(false)
+
+    useEffect(() => {
+        const isRemember = localStorage.getItem("isPetshoppingAdminRemember")
+        const userEmail = localStorage.getItem("petshoppingAdminUserEmail")
+
+        if (isRemember === "true") {
+            setIsRemember(true)
+            setEmail(userEmail)
+        }
+    }, [])
 
     // 驗證
     const RequiredColvalidate = () => {
@@ -26,6 +37,7 @@ export default function Login() {
         return inValidColumnList
     }
 
+    // 登入
     const handleLogin = async () => {
         const inValidColumnList = RequiredColvalidate();
         if (inValidColumnList.length > 0) {
@@ -39,7 +51,7 @@ export default function Login() {
                     { withCredentials: true }
                 ).then(res => {
                     document.cookie = `csrfToken=${res.data.csrfToken}; path=/`
-        
+                    handleLocalStorageData()
                     alertify.alert("", "登入成功")
                     setTimeout(() => {
                         navigate("/")
@@ -55,6 +67,17 @@ export default function Login() {
         }
     };
 
+    // 登入後儲存/移除 LocalStorage 的使用者登入資料
+    function handleLocalStorageData() {
+        if (isRemember) {
+            localStorage.setItem("isPetshoppingAdminRemember", true)
+            localStorage.setItem("petshoppingAdminUserEmail", email)
+        } else {
+            localStorage.setItem("isPetshoppingAdminRemember", false)
+            localStorage.setItem("petshoppingAdminUserEmail", "")
+        }
+    }
+
     return (
         <>
             <div className="userpage-main-content-area">
@@ -68,7 +91,8 @@ export default function Login() {
                                 <img className="userpage-logo me-2 mb-4" src="images/logo1.png" alt="Logo"></img>
                                 <div className="userpage-form-title-area mb-4">
                                     <p className="text-center font-bold text-3xl mb-2">毛孩物坊</p>
-                                    <p className="text-center font-bold text-xl">會員登入</p>
+                                    <p className="text-center font-bold text-3xl mb-6">後臺管理系統</p>
+                                    <p className="text-center font-bold text-xl mb-2">管理帳號登入</p>
                                 </div>
                                 <label className="w-full flex flex-col mb-2">
                                     <span className="me-4 mb-2">電子信箱</span>
@@ -87,6 +111,11 @@ export default function Login() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="userpage-form-input"
                                     />
+                                </label>
+                                <label className="w-full flex mb-4">
+                                    <input type="checkbox" checked={isRemember} onChange={(e) => setIsRemember(e.target.checked)} className="me-2"
+                                    />
+                                    <span>記住電子信箱</span>
                                 </label>
                                 <button type="button" onClick={handleLogin} className="userpage-form-button mb-2">登入</button>
                             </div>

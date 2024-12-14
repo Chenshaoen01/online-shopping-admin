@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 import axios from "axios"
@@ -13,7 +13,7 @@ export default () => {
         updateUserInfo()
     }, [])
 
-    const updateUserInfo = () => {
+    const updateUserInfo = useCallback( () => {
         axios.get(`${process.env.REACT_APP_API_URL}/users/getAdminUserInfo`)
             .then(res => {
                 setUserEmail(res.data.user_email)
@@ -24,9 +24,9 @@ export default () => {
             .catch(err => {
                 navigate("/login")
             })
-    }
+    }, [])
 
-    const logOut = () => {
+    const logOut = useCallback(() => {
         axios.post(`${process.env.REACT_APP_API_URL}/users/logout`)
             .then(res => {
                 document.cookie = 'csrfToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
@@ -35,7 +35,7 @@ export default () => {
             .catch(err => {
                 console.log(err)
             })
-    };
+    }, [])
 
     return <div className="sidebar-area">
         <div className="sidebar-account-area">
@@ -72,7 +72,7 @@ export default () => {
             </Link>
             <Link to="/admin/question" className="sidebar-link-item">
                 <img className="sidebar-link-item-img" src="/images/conversation-icon.png"></img>
-                <span>常見問題設定</span>
+                <span>常見問答設定</span>
             </Link>
             <Link to="/admin/banner" className="sidebar-link-item">
                 <img className="sidebar-link-item-img" src="/images/image-icon.png"></img>

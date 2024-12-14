@@ -1,14 +1,14 @@
 import axios from "axios"
 import alertify from "alertifyjs"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
     // 產品資料 編輯
-    const updateModalData = (newValue, columnName) => {
-        const newModalData = { ...modalData }
-        newModalData[columnName] = newValue
-        setModalData(newModalData)
-    }
+    const updateModalData = useCallback((newValue, columnName) => {
+        setModalData((pre) => {
+            return { ...pre, [columnName]: newValue }
+        })
+    }, [modalData])
 
     // 圖片 新增/刪除/上傳
     const [newImage, setNewImage] = useState(null)
@@ -18,7 +18,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             url: URL.createObjectURL(newImageFile)
         })
     }
-    const uploadImage = async (imageFile) => {
+    const uploadImage = useCallback(async (imageFile) => {
         let uploadResult = null
         const postFormData = new FormData()
         postFormData.append('bannerImg', newImage.file)
@@ -31,10 +31,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             })
 
         return uploadResult
-    }
+    }, newImage)
 
     // 驗證
-    const validate = () => {
+    const validate = useCallback(() => {
         const validateColumn = [
             { columnName: 'banner_sort', columnChName: "輪播圖片排序" }
         ]
@@ -50,10 +50,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         const imgValidateColumn = !isEdit && (newImage === "" || newImage === null) ? ["輪播圖片檔案"] : []
 
         return [...inValidColumnList, ...imgValidateColumn]
-    }
+    }, [modalData, newImage])
 
     // 存檔
-    const doSave = async () => {
+    const doSave = useCallback(async () => {
         const inValidColumnList = validate()
         if (inValidColumnList.length > 0) {
             let isFistItem = true
@@ -73,23 +73,25 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/banner/${modalData.banner_id}` : `${process.env.REACT_APP_API_URL}/banner`,
-                data: isEdit ? { ...modalData, new_banner_img: uploadResult } : { ...modalData, new_banner_img: uploadResult }
+                data: { ...modalData, new_banner_img: uploadResult }
             }).then(res => {
-                alertify.alert("", "儲存成功")
+                const responseMessage = res?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 MicroModal.close("banner-modal")
                 setNewImage(null)
                 getDataList()
             })
-                .catch(err => {
-                    alertify.alert("", "儲存失敗")
-                    console.log(err)
-                })
+            .catch(err => {
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存失敗")
+                console.log(err)
+            })
         }
-    }
+    }, [modalData, newImage])
 
     return <>
         <div className="modal micromodal-slide" id="banner-modal" aria-hidden="true">
-            <div className="modal__overlay" data-micromodal-close>
+            <div className="modal__overlay">
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="banner-modal-title">
                     <header className="modal__header">
                         <h2 className="modal__title" id="banner-modal-title">首頁輪播圖片設定</h2>
