@@ -1,6 +1,7 @@
 import axios from "axios"
 import alertify from "alertifyjs"
 import { useCallback } from "react"
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
     // 產品資料 編輯
@@ -40,21 +41,24 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         } else {
             const postModalData = { ...modalData }
 
+            LoadingPageShow()
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/param/${modalData.param_id}` : `${process.env.REACT_APP_API_URL}/param`,
                 data: postModalData
             }).then(res => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 MicroModal.close("parameter-modal")
                 getDataList()
             })
-                .catch(err => {
-                    const responseMessage = err.response?.data?.message
-                    alertify.alert("", responseMessage? responseMessage : "儲存失敗")
-                    console.log(err)
-                })
+            .catch(err => {
+                LoadingPageHide()
+                const responseMessage = err.response?.data?.message
+                alertify.alert("", responseMessage? responseMessage : "儲存失敗")
+                console.log(err)
+            })
         }
     }, [modalData])
 

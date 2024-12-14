@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import ProductModal from "../components/ProductModal.js";
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -51,8 +52,10 @@ export default () => {
     }, [currentPage])
 
     const getDataList = useCallback(() => {
+        LoadingPageShow()
         axios.get(`${process.env.REACT_APP_API_URL}/product?page=${currentPage}`)
         .then((res) => {
+            LoadingPageHide()
             if(Array.isArray(res.data.dataList)) {
                 res.data.dataList.forEach(data => data.isChecked = false)
                 setDataList(res.data.dataList)
@@ -65,23 +68,25 @@ export default () => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            LoadingPageHide()
         })
     }, [currentPage])
 
     // 取得單一資料詳細資料
     const getDetailData = useCallback((productId) => {
-        clearModalData()
         if(productId !== undefined) {
+            clearModalData()
+            LoadingPageShow()
             axios.get(`${process.env.REACT_APP_API_URL}/product/${productId}`)
             .then((res) => {
+                LoadingPageHide()
                 setIsEdit(true)
                 if(res.data) {
                     setModalData(res.data)
                 }
             })
             .catch((err) => {
-                console.log(err)
+                LoadingPageHide()
             })
         }
     }, [])
@@ -93,16 +98,18 @@ export default () => {
     }
     const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
+            LoadingPageShow()
             axios.delete(`${process.env.REACT_APP_API_URL}/product`, {data:{product_ids: deletedIdList}})
             .then((res) => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "刪除成功")
                 getDataList()
             })
             .catch((err) => {
+                LoadingPageHide()
                 const responseMessage = err.response?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "刪除失敗")
-                console.log(err)
             })
         }
     }, [])
@@ -111,16 +118,18 @@ export default () => {
     const doActiveEdit = useCallback((isActive) => {
         const editedIdList = dataList.filter(data => data.isChecked).map(data => data.product_id)
         if(editedIdList.length > 0) {
+            LoadingPageShow()
             axios.post(`${process.env.REACT_APP_API_URL}/product/update-active-status`, {product_ids: editedIdList, isActive: isActive})
             .then((res) => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : `${isActive? "上架":"下架"}成功`)
                 getDataList()
             })
             .catch((err) => {
+                LoadingPageHide()
                 const responseMessage = err.response?.data?.message
                 alertify.alert("", responseMessage? responseMessage : `${isActive? "上架":"下架"}失敗`)
-                console.log(err)
             })
         }
     }, [dataList])

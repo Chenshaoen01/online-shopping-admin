@@ -388,6 +388,34 @@ code {
   outline: none;
 }
 
+/* 載入中畫面 */
+.loading-page {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 100000;
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --_c:no-repeat radial-gradient(farthest-side,#25b09b 92%,#0000);
+  background: 
+    var(--_c) top,
+    var(--_c) left,
+    var(--_c) right,
+    var(--_c) bottom;
+  background-size: 12px 12px;
+  animation: loader-rotate 1s infinite;
+}
+@keyframes loader-rotate {to{transform: rotate(.5turn)}}
+
 /* modal內樣式 */
 .modal-sub-img {
   margin-right: 1rem;

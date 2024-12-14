@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import ProductCategoryModal from "../components/ProductCategoryModal.js";
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -42,8 +43,10 @@ export default () => {
     }, [currentPage])
 
     const getDataList = useCallback(() => {
+        LoadingPageShow()
         axios.get(`${process.env.REACT_APP_API_URL}/productCategory?page=${currentPage}`)
         .then((res) => {
+            LoadingPageHide()
             if(Array.isArray(res.data.dataList)) {
                 setDataList(res.data.dataList)
             }
@@ -55,22 +58,24 @@ export default () => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            LoadingPageHide()
         })
     }, [currentPage])
 
     // 取得單一資料詳細資料
     const getDetailData = useCallback((dataId) => {
         setIsEdit(true)
+        LoadingPageShow()
         if(dataId !== undefined) {
             axios.get(`${process.env.REACT_APP_API_URL}/productCategory/${dataId}`)
             .then((res) => {
+                LoadingPageHide()
                 if(res.data) {
                     setModalData(res.data)
                 }
             })
             .catch((err) => {
-                console.log(err)
+                LoadingPageHide()
             })
         }
     }, [])
@@ -82,13 +87,16 @@ export default () => {
     }
     const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
+            LoadingPageShow()
             axios.delete(`${process.env.REACT_APP_API_URL}/productCategory`, {data:{category_ids: deletedIdList}})
             .then((res) => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "刪除成功")
                 getDataList()
             })
             .catch((err) => {
+                LoadingPageHide()
                 const responseMessage = err.response?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "刪除失敗")
                 console.log(err)

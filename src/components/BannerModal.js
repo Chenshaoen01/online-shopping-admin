@@ -1,6 +1,7 @@
 import axios from "axios"
 import alertify from "alertifyjs"
 import { useCallback, useState } from "react"
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
     // 產品資料 編輯
@@ -22,11 +23,14 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         let uploadResult = null
         const postFormData = new FormData()
         postFormData.append('bannerImg', newImage.file)
+        LoadingPageShow()
         await axios.post(`${process.env.REACT_APP_API_URL}/banner/bannerImg`, postFormData)
             .then(res => {
+                LoadingPageHide()
                 uploadResult = res.data.fileName
             })
             .catch(err => {
+                LoadingPageHide()
                 console.log(err)
             })
 
@@ -70,11 +74,13 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 uploadResult = await uploadImage()
             }
 
+            LoadingPageShow()
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/banner/${modalData.banner_id}` : `${process.env.REACT_APP_API_URL}/banner`,
                 data: { ...modalData, new_banner_img: uploadResult }
             }).then(res => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 MicroModal.close("banner-modal")
@@ -82,9 +88,9 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 getDataList()
             })
             .catch(err => {
+                LoadingPageHide()
                 const responseMessage = err.response?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "儲存失敗")
-                console.log(err)
             })
         }
     }, [modalData, newImage])

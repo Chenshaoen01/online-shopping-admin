@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import alertify from 'alertifyjs';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { LoadingPage, LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 export default function Login() {
     const navigate = useNavigate()
@@ -45,11 +46,13 @@ export default function Login() {
             alertify.alert("", `${inValidString}為必填項目`)
         } else {
             try {
+                LoadingPageShow()
                 await axios.post(
                     `${process.env.REACT_APP_API_URL}/users/login`,
                     { user_email: email, user_password: password },
                     { withCredentials: true }
                 ).then(res => {
+                    LoadingPageHide()
                     document.cookie = `csrfToken=${res.data.csrfToken}; path=/`
                     handleLocalStorageData()
                     alertify.alert("", "登入成功")
@@ -57,12 +60,12 @@ export default function Login() {
                         navigate("/")
                     }, 2000)
                 }).catch(err => {
-                    console.log(err)
+                    LoadingPageHide()
                     alertify.alert("", "帳號或密碼錯誤");
                     return;
                 })    
             } catch (error) {
-                console.error(error)
+                LoadingPageHide()
             }
         }
     };
@@ -80,6 +83,7 @@ export default function Login() {
 
     return (
         <>
+            <LoadingPage></LoadingPage>
             <div className="userpage-main-content-area">
                 <div className="grid grid-cols-12">
                     <div className="col-span-7 hidden md:flex">

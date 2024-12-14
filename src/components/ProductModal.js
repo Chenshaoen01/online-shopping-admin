@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import alertify from "alertifyjs"
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 
 export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) => {
     // 取得商品種類列表
@@ -89,7 +90,9 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                     console.log(err)
                 })
         })
+        LoadingPageShow()
         await Promise.all(UploadRequest)
+        LoadingPageHide()
         return uploadResult
     }, [newImages])
 
@@ -143,7 +146,6 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             alertify.alert("", `${inValidModelString}${inValidModelString !== "" && inValidString !== ""? "，": ""}${inValidString}`)
         } else {
             const uploadResult = await uploadImage()
-
             const postModalData = { ...modalData }
             uploadResult.forEach(uploadImgName => {
                 postModalData.images.push({
@@ -153,11 +155,13 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                     state: "Added"
                 })
             })
+            LoadingPageShow()
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/product/${modalData.product_id}` : `${process.env.REACT_APP_API_URL}/product`,
                 data: postModalData
             }).then(res => {
+                LoadingPageHide()
                 const responseMessage = res?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 
@@ -166,9 +170,9 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 getDataList()
             })
             .catch(err => {
+                LoadingPageHide()
                 const responseMessage = err.response?.data?.message
                 alertify.alert("", responseMessage? responseMessage : "儲存失敗")
-                console.log(err)
             })
         }
     }, [modalData, isEdit, newImages])
