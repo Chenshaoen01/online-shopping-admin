@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
+
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import ParameterModal from "../components/ParameterModal.js";
 import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
+import paramIcon from "../images/param-icon.png"
 
 import axios from "axios";
 import alertify from "alertifyjs"
 import MicroModal from "micromodal"
+
 export default () => {
     useEffect(() => {
         MicroModal.init()
@@ -107,7 +110,7 @@ export default () => {
         <div className="main-conteant-header">
             <div className="flex items-center mb-3">
                 <div className="flex items-center">
-                    <img className="sidebar-link-item-img" src="/images/param-icon.png"></img>
+                    <img className="sidebar-link-item-img" src={paramIcon}></img>
                     <span className="me-3">基本資料設定</span>
                 </div>
                 <button type="button" className="button-primary"

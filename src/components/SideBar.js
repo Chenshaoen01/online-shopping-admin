@@ -3,6 +3,14 @@ import { Link, useNavigate } from "react-router-dom"
 
 import axios from "axios"
 
+import logo from "../images/logo1.png"
+import hamburIcon from "../images/menu-burger.svg"
+import paramIcon from "../images/param-icon.png"
+import cartIcon from "../images/cart-icon.png"
+import paperBoxIcon from "../images/paperbox-icon.png"
+import imageIcon from "../images/image-icon.png"
+import conversationIcon from "../images/conversation-icon.png"
+
 export default () => {
     const [userEmail, setUserEmail] = useState('')
     const [userName, setUserName] = useState('')
@@ -41,7 +49,7 @@ export default () => {
         <div className="sidebar-account-area">
             <div className="system-title-area">
                 <Link to="/">
-                    <img className="sidebar-logo-img" src="/images/logo1.png"></img>
+                    <img className="sidebar-logo-img" src={logo}></img>
                 </Link>
                 <div>毛孩物坊後台管理系統</div>
             </div>
@@ -51,31 +59,31 @@ export default () => {
                 <div>{userEmail}</div>
             </div>
             <button type="button" className="log-out-button" onClick={() => { logOut() }}>登出</button>
-            <img className="hambur-icon" src="/images/menu-burger.svg" onClick={() => { setIsExpanded(!isExpanded) }}></img>
+            <img className="hambur-icon" src={hamburIcon} onClick={() => { setIsExpanded(!isExpanded) }}></img>
         </div>
         <div className={isExpanded ? "sidebar-linklist-area active" : "sidebar-linklist-area"}>
             <Link to="/admin/param" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/param-icon.png"></img>
+                <img className="sidebar-link-item-img" src={paramIcon}></img>
                 <span>基本資料設定</span>
             </Link>
             <Link to="/admin/order" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/cart-icon.png"></img>
+                <img className="sidebar-link-item-img" src={cartIcon}></img>
                 <span>訂單管理系統</span>
             </Link>
             <Link to="/admin/productCategory" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/paperbox-icon.png"></img>
+                <img className="sidebar-link-item-img" src={paperBoxIcon}></img>
                 <span>商品類別設定</span>
             </Link>
             <Link to="/admin/product" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/paperbox-icon.png"></img>
+                <img className="sidebar-link-item-img" src={paperBoxIcon}></img>
                 <span>商品管理系統</span>
             </Link>
             <Link to="/admin/question" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/conversation-icon.png"></img>
+                <img className="sidebar-link-item-img" src={conversationIcon}></img>
                 <span>常見問答設定</span>
             </Link>
             <Link to="/admin/banner" className="sidebar-link-item">
-                <img className="sidebar-link-item-img" src="/images/image-icon.png"></img>
+                <img className="sidebar-link-item-img" src={imageIcon}></img>
                 <span>首頁輪播設定</span>
             </Link>
             <div className="mobile-user-info">

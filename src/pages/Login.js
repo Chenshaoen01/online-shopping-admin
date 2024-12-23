@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import alertify from 'alertifyjs';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import { LoadingPage, LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
+import logo from "../images/logo1.png"
 
 export default function Login() {
     const navigate = useNavigate()
@@ -53,7 +55,7 @@ export default function Login() {
                     { withCredentials: true }
                 ).then(res => {
                     LoadingPageHide()
-                    document.cookie = `csrfToken=${res.data.csrfToken}; path=/`
+                    // document.cookie = `csrfToken=${res.data.csrfToken}; path=/`
                     handleLocalStorageData()
                     alertify.alert("", "登入成功")
                     setTimeout(() => {
@@ -92,7 +94,7 @@ export default function Login() {
                     <div className="col-span-12 md:col-span-5">
                         <div className="userpage-form-area-container">
                             <div className="userpage-form-area">
-                                <img className="userpage-logo me-2 mb-4" src="images/logo1.png" alt="Logo"></img>
+                                <img className="userpage-logo me-2 mb-4" src={logo} alt="Logo"></img>
                                 <div className="userpage-form-title-area mb-4">
                                     <p className="text-center font-bold text-3xl mb-2">毛孩物坊</p>
                                     <p className="text-center font-bold text-3xl mb-6">後臺管理系統</p>

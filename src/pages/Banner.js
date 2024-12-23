@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+
 import ImageCardList from "../components/ImageCardList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import BannerModal from "../components/BannerModal.js";
 import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
+import imageIcon from "../images/image-icon.png"
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -108,7 +110,7 @@ export default () => {
         <div className="main-conteant-header">
             <div className="flex items-center mb-3">
                 <div className="flex items-center">
-                    <img className="sidebar-link-item-img" src="/images/image-icon.png"></img>
+                    <img className="sidebar-link-item-img" src={imageIcon}></img>
                     <span className="me-3">首頁輪播設定</span>
                 </div>
                 <button type="button" className="button-primary"

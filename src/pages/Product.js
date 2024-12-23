@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import ProductModal from "../components/ProductModal.js";
 import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
+import paperBoxIcon from "../images/paperbox-icon.png"
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -138,7 +140,7 @@ export default () => {
         <div className="main-conteant-header">
             <div className="flex items-center mb-3">
                 <div className="flex items-center">
-                    <img className="sidebar-link-item-img" src="/images/paperbox-icon.png"></img>
+                    <img className="sidebar-link-item-img" src={paperBoxIcon}></img>
                     <span className="me-3">商品管理系統</span>
                 </div>
                 <button type="button" className="button-primary"

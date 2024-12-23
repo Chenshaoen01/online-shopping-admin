@@ -1,4 +1,5 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import Parameter from './pages/Parameter';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -13,7 +14,7 @@ import {AdminProvider} from './components/AdminContext';
 function App() {
   return (
     <AdminProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/' element={<AdminLayout />}>
@@ -26,7 +27,7 @@ function App() {
             <Route path='/admin/banner' element={<Banner />}></Route>
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AdminProvider>
   );
 }

@@ -1,8 +1,8 @@
 {
   "name": "admin-system",
+  "homepage": "https://chenshaoen01.github.io/online-shopping-admin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Chenshaoen01.github.io/online-shopping-admin",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

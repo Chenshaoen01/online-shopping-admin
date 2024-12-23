@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+
 import DataList from "../components/DataList.js";
 import PageButtonGroup from "../components/PageButtonGroup.js";
 import QuestionModal from "../components/QuestionModal.js";
 import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
+import conversationIcon from "../images/conversation-icon.png"
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -109,7 +111,7 @@ export default () => {
         <div className="main-conteant-header">
             <div className="flex items-center mb-3">
                 <div className="flex items-center">
-                    <img className="sidebar-link-item-img" src="/images/conversation-icon.png"></img>
+                    <img className="sidebar-link-item-img" src={conversationIcon}></img>
                     <span className="me-3">常見問答設定</span>
                 </div>
                 <button type="button" className="button-primary"
