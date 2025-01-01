@@ -130,7 +130,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                             {
                                 (newImage !== "" && newImage !== null) ?
                                     ((newImage !== "" && newImage !== null) && <img className="modal-sub-img-lg" src={newImage.url}></img>) :
-                                    ((modalData.banner_img !== "" && modalData.banner_img !== null) && <img className="modal-sub-img-lg" src={`${process.env.REACT_APP_API_URL}/images/banner/${modalData.banner_img}`}>
+                                    ((modalData.banner_img !== "" && modalData.banner_img !== null) && <img className="modal-sub-img-lg" src={`${process.env.REACT_APP_CLOUDEFLARE_PUBLIC_URL}/${modalData.banner_img}`}>
                                     </img>)
                             }
                         </div>

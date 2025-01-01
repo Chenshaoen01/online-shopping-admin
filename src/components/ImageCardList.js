@@ -6,7 +6,7 @@ export default ({ MicroModal, modalName, mainIdColumnName, imgColumnName, dataLi
                 <div className="grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-4 px-4">
                     {dataList.map(data => (
                         <div className="data-img-card mb-3" key={`mobile-list-item${data[mainIdColumnName]}`}
-                            style={{ backgroundImage: `url('${process.env.REACT_APP_API_URL}/images/banner/${data[imgColumnName]}')` }}>
+                            style={{ backgroundImage: `url('${process.env.REACT_APP_CLOUDEFLARE_PUBLIC_URL}/${data[imgColumnName]}')` }}>
                             <div className="flex justify-end">
                                 {isActionButtonExist('edit') && (
                                     <div className="edit-button-lg me-2"

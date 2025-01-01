@@ -258,7 +258,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                         </div>
                         <div className="flex flex-wrap mt-8">
                             {
-                                modalData.images?.map((image, imageIndex) => image.state !== "Deleted" && <div className="modal-sub-img relative" key={imageIndex + image.product_img} style={{ backgroundImage: `url('${process.env.REACT_APP_API_URL}/images/product/${image.product_img}')` }}>
+                                modalData.images?.map((image, imageIndex) => image.state !== "Deleted" && <div className="modal-sub-img relative" key={imageIndex + image.product_img} style={{ backgroundImage: `url('${process.env.REACT_APP_CLOUDEFLARE_PUBLIC_URL}/${image.product_img}')` }}>
                                     <div className="delete-button absolute top-0 right-0 translate-x-1/2 -translate-y-1/2" onClick={() => { deleteImage(imageIndex) }}></div>
                                 </div>)
                             }
