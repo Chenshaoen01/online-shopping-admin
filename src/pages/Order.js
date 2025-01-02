@@ -41,7 +41,12 @@ export default () => {
 
     const getDataList = useCallback(() => {
         LoadingPageShow()
-        axios.get(`${process.env.REACT_APP_API_URL}/order?page=${currentPage}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order?page=${currentPage}`,
+        {
+           headers: {
+               'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+           }
+        })
             .then((res) => {
                 LoadingPageHide()
                 if (Array.isArray(res.data.dataList)) {
@@ -83,7 +88,13 @@ export default () => {
         const selectedIdList = dataList.filter(data => data.isChecked).map(data => data.order_id)
         if (selectedIdList.length > 0) {
             LoadingPageShow()
-            axios.put(`${process.env.REACT_APP_API_URL}/order/orderStatus`, { order_ids: selectedIdList, order_status: action })
+            axios.put(`${process.env.REACT_APP_API_URL}/order/orderStatus`,
+             { order_ids: selectedIdList, order_status: action },
+             {
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+             })
                 .then((res) => {
                     LoadingPageHide()
                     const responseMessage = res?.data?.message
@@ -105,7 +116,12 @@ export default () => {
     const doDelete = useCallback((deletedIdList) => {
         if (deletedIdList.length > 0) {
             LoadingPageShow()
-            axios.delete(`${process.env.REACT_APP_API_URL}/order`, { data: { order_ids: deletedIdList } })
+            axios.delete(`${process.env.REACT_APP_API_URL}/order`, {
+                 data: { order_ids: deletedIdList },
+                 headers: {
+                     'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                 }
+                })
                 .then((res) => {
                     LoadingPageHide()
                     const responseMessage = res?.data?.message

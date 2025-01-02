@@ -19,12 +19,17 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             url: URL.createObjectURL(newImageFile)
         })
     }
-    const uploadImage = useCallback(async (imageFile) => {
+    const uploadImage = useCallback(async () => {
         let uploadResult = null
         const postFormData = new FormData()
         postFormData.append('bannerImg', newImage.file)
         LoadingPageShow()
-        await axios.post(`${process.env.REACT_APP_API_URL}/banner/bannerImg`, postFormData)
+        await axios.post(`${process.env.REACT_APP_API_URL}/banner/bannerImg`, postFormData, {
+            headers: {
+                'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+            }
+        }
+        )
             .then(res => {
                 LoadingPageHide()
                 uploadResult = res.data.fileName
@@ -78,7 +83,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/banner/${modalData.banner_id}` : `${process.env.REACT_APP_API_URL}/banner`,
-                data: { ...modalData, new_banner_img: uploadResult }
+                data: { ...modalData, new_banner_img: uploadResult },
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
             }).then(res => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message

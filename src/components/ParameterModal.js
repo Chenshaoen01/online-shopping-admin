@@ -45,7 +45,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/param/${modalData.param_id}` : `${process.env.REACT_APP_API_URL}/param`,
-                data: postModalData
+                data: postModalData,
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
             }).then(res => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message

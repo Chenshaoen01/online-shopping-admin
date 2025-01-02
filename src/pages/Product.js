@@ -101,7 +101,12 @@ export default () => {
     const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
             LoadingPageShow()
-            axios.delete(`${process.env.REACT_APP_API_URL}/product`, {data:{product_ids: deletedIdList}})
+            axios.delete(`${process.env.REACT_APP_API_URL}/product`, {
+                data:{product_ids: deletedIdList},
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
             .then((res) => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message
@@ -121,7 +126,13 @@ export default () => {
         const editedIdList = dataList.filter(data => data.isChecked).map(data => data.product_id)
         if(editedIdList.length > 0) {
             LoadingPageShow()
-            axios.post(`${process.env.REACT_APP_API_URL}/product/update-active-status`, {product_ids: editedIdList, isActive: isActive})
+            axios.post(`${process.env.REACT_APP_API_URL}/product/update-active-status`,
+             {product_ids: editedIdList, isActive: isActive},
+             {
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+             })
             .then((res) => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message

@@ -37,7 +37,7 @@ export default () => {
     const logOut = useCallback(() => {
         axios.post(`${process.env.REACT_APP_API_URL}/users/logout`)
             .then(res => {
-                document.cookie = 'csrfToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                localStorage.removeItem("csrfToken")
                 navigate("/login")
             })
             .catch(err => {

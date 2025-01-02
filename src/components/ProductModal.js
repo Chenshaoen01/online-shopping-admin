@@ -82,7 +82,11 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         const UploadRequest = newImages.map((image) => {
             const postFormData = new FormData()
             postFormData.append('productImg', image.file)
-            return axios.post(`${process.env.REACT_APP_API_URL}/product/productImg`, postFormData)
+            return axios.post(`${process.env.REACT_APP_API_URL}/product/productImg`, postFormData, {
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
                 .then(res => {
                     uploadResult.push(res.data.productFileName)
                 })
@@ -159,7 +163,10 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/product/${modalData.product_id}` : `${process.env.REACT_APP_API_URL}/product`,
-                data: postModalData
+                data: postModalData,
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
             }).then(res => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message

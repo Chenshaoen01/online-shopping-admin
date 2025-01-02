@@ -55,7 +55,7 @@ export default function Login() {
                     { withCredentials: true }
                 ).then(res => {
                     LoadingPageHide()
-                    // document.cookie = `csrfToken=${res.data.csrfToken}; path=/`
+                    localStorage.setItem("csrfToken", res.data.csrfToken)
                     handleLocalStorageData()
                     alertify.alert("", "登入成功")
                     setTimeout(() => {

@@ -92,7 +92,12 @@ export default () => {
     const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
             LoadingPageShow()
-            axios.delete(`${process.env.REACT_APP_API_URL}/question`, {data:{question_ids: deletedIdList}})
+            axios.delete(`${process.env.REACT_APP_API_URL}/question`, {
+                data:{question_ids: deletedIdList},
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
             .then((res) => {
                 LoadingPageHide()
                 const responseMessage = res?.data?.message

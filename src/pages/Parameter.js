@@ -90,19 +90,24 @@ export default () => {
     const doDelete = useCallback((deletedIdList) => {
         if(deletedIdList.length > 0) {
             LoadingPageShow()
-            axios.delete(`${process.env.REACT_APP_API_URL}/param`, {data:{param_ids: deletedIdList}})
+            axios.delete(`${process.env.REACT_APP_API_URL}/param`, {
+                data: { param_ids: deletedIdList },
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
             .then((res) => {
-                LoadingPageHide()
-                const responseMessage = res?.data?.message
-                alertify.alert("", responseMessage? responseMessage : "刪除成功")
-                getDataList()
+                LoadingPageHide();
+                const responseMessage = res?.data?.message;
+                alertify.alert("", responseMessage ? responseMessage : "刪除成功");
+                getDataList();
             })
             .catch((err) => {
-                LoadingPageHide()
-                const responseMessage = err.response?.data?.message
-                alertify.alert("", responseMessage? responseMessage : "刪除失敗")
-                console.log(err)
-            })
+                LoadingPageHide();
+                const responseMessage = err.response?.data?.message;
+                alertify.alert("", responseMessage ? responseMessage : "刪除失敗");
+                console.log(err);
+            });
         }
     }, [])
 
