@@ -5,6 +5,7 @@ import PageButtonGroup from "../components/PageButtonGroup.js";
 import OrderModal from "../components/OrderModal.js";
 import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 import cartIcon from "../images/cart-icon.png"
+import { dateStringTransfer } from "../helpers/timeFunction"
 
 import axios from "axios";
 import alertify from "alertifyjs"
@@ -26,10 +27,9 @@ export default () => {
     const [modalData, setModalData] = useState({})
     const [columnList] = useState([
         { columnName: 'order_id', columnChName: "訂單編號" },
-        { columnName: 'created_at', columnChName: "訂單建立時間" },
+        { columnName: 'created_at', columnChName: "訂單建立日期" },
         { columnName: 'user_name', columnChName: "買家帳號" },
         { columnName: 'total_price', columnChName: "訂單金額" },
-        { columnName: 'order_id', columnChName: "付款方式" },
         { columnName: 'order_status', columnChName: "訂單狀態" },
     ])
     const [dataListActions] = useState(['detail','delete'])
@@ -50,7 +50,10 @@ export default () => {
             .then((res) => {
                 LoadingPageHide()
                 if (Array.isArray(res.data.dataList)) {
-                    res.data.dataList.forEach(data => data.isChecked = false)
+                    res.data.dataList.forEach(data => {
+                        data.isChecked = false
+                        data.created_at = dateStringTransfer(data.created_at)
+                    })
                     setDataList(res.data.dataList)
                 }
                 if (res.data.lastPage) {
@@ -108,6 +111,7 @@ export default () => {
                 })
         }
     }, [dataList])
+
     // 刪除
     const deleteCheckedItems = () => {
         const deletedIdList = dataList.filter(data => data.isChecked).map(data => data.order_id)

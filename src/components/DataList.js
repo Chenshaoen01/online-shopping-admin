@@ -73,7 +73,7 @@ export default ({ MicroModal, modalName, columnList, mainIdColumnName, dataList,
                         <table className="list-item-content-table">
                             <tbody>
                                 {columnList.map((column, columnIndex) => <tr key={'mobile' + columnIndex}>
-                                    <td>{column.columnChName}</td>
+                                    <td className="whitespace-nowrap">{column.columnChName}</td>
                                     <td>{data[column.columnName]}</td>
                                 </tr>)}
                             </tbody>

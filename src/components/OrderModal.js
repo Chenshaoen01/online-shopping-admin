@@ -1,3 +1,4 @@
+import { dateStringTransfer } from "../helpers/timeFunction"
 export default ({ modalData }) => {
     return <>
         <div className="modal micromodal-slide" id="order-modal" aria-hidden="true">
@@ -20,32 +21,20 @@ export default ({ modalData }) => {
                             </div>
                             <div className="flex flex-col">
                                 <label className="form-label">
-                                    <span className="form-title">訂單建立時間</span>
-                                    <span>{modalData.order?.created_at}</span>
+                                    <span className="form-title">訂單建立日期</span>
+                                    <span>{dateStringTransfer(modalData.order?.created_at)}</span>
                                 </label>
                             </div>
                             <div className="flex flex-col">
                                 <label className="form-label">
-                                    <span className="form-title">付款方式</span>
-                                    <span>{modalData.order?.payment_method}</span>
+                                    <span className="form-title">訂單金額</span>
+                                    <span>{modalData.order?.total_price}</span>
                                 </label>
                             </div>
                             <div className="flex flex-col">
-                                <label className="form-label">
+                                <label>
                                     <span className="form-title">訂單狀態</span>
                                     <span>{modalData.order?.order_status}</span>
-                                </label>
-                            </div>
-                            <div className="flex flex-col">
-                                <label className="form-label">
-                                    <span className="form-title">出貨地址</span>
-                                    <span>{modalData.order?.shipping_address}</span>
-                                </label>
-                            </div>
-                            <div className="flex flex-col">
-                                <label className="form-label">
-                                    <span className="form-title">訂單備註</span>
-                                    <span>{modalData.order?.notes}</span>
                                 </label>
                             </div>
                         </div>
@@ -65,9 +54,31 @@ export default ({ modalData }) => {
                                 </label>
                             </div>
                             <div className="flex flex-col">
-                                <label className="form-label">
+                                <label>
                                     <span className="form-title">買家連絡電話</span>
                                     <span>{modalData.user?.user_tel}</span>
+                                </label>
+                            </div>  
+                        </div>
+                        <div className="devider my-4"></div>
+                        {/* 出貨超商種類 / 出貨門市名稱 / 出貨門市編號 */}
+                        <div className="flex flex-col">
+                            <div className="flex flex-col">
+                                <label className="form-label">
+                                    <span className="form-title">出貨超商種類</span>
+                                    <span>{modalData.order?.csv_type}</span>
+                                </label>
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="form-label">
+                                    <span className="form-title">出貨門市名稱</span>
+                                    <span>{modalData.order?.store_name}</span>
+                                </label>
+                            </div>
+                            <div className="flex flex-col">
+                                <label>
+                                    <span className="form-title">出貨門市編號</span>
+                                    <span>{modalData.order?.store_id}</span>
                                 </label>
                             </div>  
                         </div>
