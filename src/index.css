@@ -435,7 +435,7 @@ code {
 
 .subdata-card {
   border: solid 1px #CCCCCC;
-  padding: 0.5rem 1.5rem 1rem 1.5rem;
+  padding: 1rem 1.5rem 1rem 1.5rem;
 }
 
 /* alertify 樣式 */
@@ -510,4 +510,8 @@ code {
 .edit-button-lg, .delete-button-lg {
   width: 24px;
   height: 24px;
+}
+
+.action-button-column .action-button:not(:last-child) {
+  margin-right: 0.5rem;
 }

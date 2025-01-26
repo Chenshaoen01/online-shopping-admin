@@ -27,17 +27,17 @@ export default ({ MicroModal, modalName, columnList, mainIdColumnName, dataList,
                                     onChange={(e) => { setDataChecked(e.target.checked, dataIndex) }}></input>
                             </td>
                             {columnList.map((column, columnIndex) => <td key={`pc${columnIndex}`}>{data[column.columnName]}</td>)}
-                            <td>
+                            <td className="action-button-column">
                                 {isActionButtonExist('edit') && (
-                                    <button type="button" className="button-transparent me-3"
+                                    <button type="button" className="action-button button-transparent"
                                         onClick={() => { getDetailData(data[mainIdColumnName]); MicroModal.show(modalName); }}>編輯</button>
                                 )}
                                 {isActionButtonExist('detail') && (
-                                    <button type="button" className="button-transparent me-3"
+                                    <button type="button" className="action-button button-transparent"
                                         onClick={() => { getDetailData(data[mainIdColumnName]); MicroModal.show(modalName); }}>查看</button>
                                 )}
                                 {isActionButtonExist('delete') && (
-                                    <button type="button" className="button-transparent"
+                                    <button type="button" className="action-button button-transparent"
                                         onClick={() => { doDelete([data[mainIdColumnName]]) }}>刪除</button>
                                 )}
                             </td>

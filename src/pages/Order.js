@@ -20,6 +20,8 @@ export default () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageButtonList, setPageButtonList] = useState([])
 
+    const [isFinishedShown, setIsFinishedShown] = useState('0')
+
     const mainIdColumnName = "order_id"
     const modalName = "order-modal"
     const [dataList, setDataList] = useState([])
@@ -32,7 +34,7 @@ export default () => {
         { columnName: 'total_price', columnChName: "訂單金額" },
         { columnName: 'order_status', columnChName: "訂單狀態" },
     ])
-    const [dataListActions] = useState(['detail','delete'])
+    const [dataListActions] = useState(['detail'])
 
     // 取得資料列表
     useEffect(() => {
@@ -41,12 +43,12 @@ export default () => {
 
     const getDataList = useCallback(() => {
         LoadingPageShow()
-        axios.get(`${process.env.REACT_APP_API_URL}/order?page=${currentPage}`,
-        {
-           headers: {
-               'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
-           }
-        })
+        axios.get(`${process.env.REACT_APP_API_URL}/order?page=${currentPage}&isFinishedShown=${isFinishedShown}`,
+            {
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
             .then((res) => {
                 LoadingPageHide()
                 if (Array.isArray(res.data.dataList)) {
@@ -66,7 +68,11 @@ export default () => {
             .catch((err) => {
                 LoadingPageHide()
             })
-    }, [currentPage])
+    }, [currentPage, isFinishedShown])
+
+    useEffect(() => {
+        getDataList()
+    }, [isFinishedShown])
 
     // 取得單一資料詳細資料
     const getDetailData = useCallback((dataId) => {
@@ -92,53 +98,25 @@ export default () => {
         if (selectedIdList.length > 0) {
             LoadingPageShow()
             axios.put(`${process.env.REACT_APP_API_URL}/order/orderStatus`,
-             { order_ids: selectedIdList, order_status: action },
-             {
-                headers: {
-                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
-                }
-             })
+                { order_ids: selectedIdList, order_status: action },
+                {
+                    headers: {
+                        'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                    }
+                })
                 .then((res) => {
                     LoadingPageHide()
                     const responseMessage = res?.data?.message
-                    alertify.alert("", responseMessage? responseMessage : "訂單狀態調整成功")
+                    alertify.alert("", responseMessage ? responseMessage : "訂單狀態調整成功")
                     getDataList()
                 })
                 .catch((err) => {
                     LoadingPageHide()
                     const responseMessage = err.response?.data?.message
-                    alertify.alert("", responseMessage? responseMessage : "訂單狀態調整失敗")
+                    alertify.alert("", responseMessage ? responseMessage : "訂單狀態調整失敗")
                 })
         }
     }, [dataList])
-
-    // 刪除
-    const deleteCheckedItems = () => {
-        const deletedIdList = dataList.filter(data => data.isChecked).map(data => data.order_id)
-        doDelete(deletedIdList)
-    }
-    const doDelete = useCallback((deletedIdList) => {
-        if (deletedIdList.length > 0) {
-            LoadingPageShow()
-            axios.delete(`${process.env.REACT_APP_API_URL}/order`, {
-                 data: { order_ids: deletedIdList },
-                 headers: {
-                     'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
-                 }
-                })
-                .then((res) => {
-                    LoadingPageHide()
-                    const responseMessage = res?.data?.message
-                    alertify.alert("", responseMessage? responseMessage : "刪除成功")
-                    getDataList()
-                })
-                .catch((err) => {
-                    LoadingPageHide()
-                    const responseMessage = err.response?.data?.message
-                    alertify.alert("", responseMessage? responseMessage : "刪除失敗")
-                })
-        }
-    }, [])
 
     return <>
         <div className="main-conteant-header">
@@ -148,13 +126,24 @@ export default () => {
                     <span className="me-3">訂單管理系統</span>
                 </div>
             </div>
-            <div className="flex items-center">
-            <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已付款") }}>已付款</button>
-                <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已出貨") }}>已出貨</button>
-                <button type="button" className="button-primary" onClick={() => { deleteCheckedItems() }}>刪除</button>
+            <div className="flex justify-between">
+                <div className="flex items-center">
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已付款") }}>已付款</    button>
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已出貨") }}>已出貨</    button>
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已完成") }}>已完成</    button>
+                </div>
+                <label>
+                   <input name="is_active" type="checkbox"
+                       className="me-4"
+                       checked={isFinishedShown === '1'}
+                       onChange={(e) => { 
+                           setIsFinishedShown(e.target.checked? '1' : '0')
+                       }}></input>
+                   <span className="form-title">是否顯示已完成訂單</span>
+                </label>
             </div>
         </div>
-        <DataList MicroModal={MicroModal} modalName={modalName} columnList={columnList} mainIdColumnName={mainIdColumnName} dataList={dataList} dataListActions={dataListActions} setDataList={setDataList} getDetailData={getDetailData} doDelete={doDelete} />
+        <DataList MicroModal={MicroModal} modalName={modalName} columnList={columnList} mainIdColumnName={mainIdColumnName} dataList={dataList} dataListActions={dataListActions} setDataList={setDataList} getDetailData={getDetailData} />
         <OrderModal MicroModal={MicroModal} modalData={modalData} setModalData={setModalData} isEdit={isEdit} getDataList={getDataList} />
         <PageButtonGroup lastPage={lastPage} pageButtonList={pageButtonList} currentPage={currentPage} setCurrentPage={setCurrentPage} getDataList={getDataList} />
     </>

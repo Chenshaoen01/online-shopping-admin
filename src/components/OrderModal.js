@@ -1,5 +1,36 @@
+import { useState, useCallback, useEffect, useMemo } from "react"
+
+import axios from "axios";
+import { LoadingPageShow, LoadingPageHide } from "../components/LoadingPage.js";
 import { dateStringTransfer } from "../helpers/timeFunction"
+
 export default ({ modalData }) => {
+    useEffect(() => {
+        getCvsTypeOptions()
+    }, [])
+
+    // 取得物流方式選項
+    const [cvsTypeOptions, setCvsTypeOptions] = useState([])
+    const getCvsTypeOptions = useCallback(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/logistic/getCvsTypeOptions`,
+            {
+                headers: {
+                    'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
+                }
+            })
+            .then((res) => {
+                console.log(res.data)
+                setCvsTypeOptions(res.data)
+            })
+            .catch((err) => {})
+    }, [])
+
+    // 取得物流方式名稱
+    const csvTypeName = useMemo(() => {
+        const targetCsvTypeOptionIndex = cvsTypeOptions.findIndex(option => option.CvsTypeCode === modalData.order?.csv_type)
+        return targetCsvTypeOptionIndex !== -1 ? cvsTypeOptions[targetCsvTypeOptionIndex].CvsTypeName : ""
+    }, [cvsTypeOptions, modalData])
+
     return <>
         <div className="modal micromodal-slide" id="order-modal" aria-hidden="true">
             <div className="modal__overlay" data-micromodal-close>
@@ -39,26 +70,20 @@ export default ({ modalData }) => {
                             </div>
                         </div>
                         <div className="devider my-4"></div>
-                        {/* 買家名稱 / 買家Email / 買家連絡電話 */}
+                        {/* 收件人姓名 / 收件人電話 / 買家連絡電話 */}
                         <div className="flex flex-col">
                             <div className="flex flex-col">
                                 <label className="form-label">
-                                    <span className="form-title">買家名稱</span>
-                                    <span>{modalData.user?.user_name}</span>
+                                    <span className="form-title">收件人姓名</span>
+                                    <span>{modalData.order?.receiver_name}</span>
                                 </label>
                             </div>
                             <div className="flex flex-col">
                                 <label className="form-label">
-                                    <span className="form-title">買家Email</span>
-                                    <span>{modalData.user?.user_email}</span>
+                                    <span className="form-title">收件人電話</span>
+                                    <span>{modalData.order?.receiver_phone}</span>
                                 </label>
-                            </div>
-                            <div className="flex flex-col">
-                                <label>
-                                    <span className="form-title">買家連絡電話</span>
-                                    <span>{modalData.user?.user_tel}</span>
-                                </label>
-                            </div>  
+                            </div> 
                         </div>
                         <div className="devider my-4"></div>
                         {/* 出貨超商種類 / 出貨門市名稱 / 出貨門市編號 */}
@@ -66,7 +91,7 @@ export default ({ modalData }) => {
                             <div className="flex flex-col">
                                 <label className="form-label">
                                     <span className="form-title">出貨超商種類</span>
-                                    <span>{modalData.order?.csv_type}</span>
+                                    <span>{csvTypeName}</span>
                                 </label>
                             </div>
                             <div className="flex flex-col">
