@@ -360,10 +360,11 @@ code {
 /* 表單樣式 */
 .form-label {
   margin-bottom: 1rem;
+  display: flex;
 }
 .form-title {
   display: inline-block;
-  min-width: 100px;  
+  min-width: 90px;  
   margin-right: 2rem;
 }
 .form-input,

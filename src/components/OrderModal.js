@@ -47,7 +47,7 @@ export default ({ modalData }) => {
                             <div className="flex flex-col">
                                 <label className="form-label">
                                     <span className="form-title">訂單編號</span>
-                                    <span>{modalData.order?.order_id}</span>
+                                    <span className="break-all">{modalData.order?.order_id}</span>
                                 </label>
                             </div>
                             <div className="flex flex-col">
@@ -146,7 +146,8 @@ export default ({ modalData }) => {
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>))}
+                                        </div>)
+                                    )}
                                 </div>
                             </>
                         }

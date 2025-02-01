@@ -126,13 +126,13 @@ export default () => {
                     <span className="me-3">訂單管理系統</span>
                 </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row justify-between">
                 <div className="flex items-center">
-                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已付款") }}>已付款</    button>
-                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已出貨") }}>已出貨</    button>
-                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已完成") }}>已完成</    button>
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已付款") }}>已付款</button>
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已出貨") }}>已出貨</button>
+                    <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已完成") }}>已完成</button>
                 </div>
-                <label>
+                <label className="mt-2 md:mt-0">
                    <input name="is_active" type="checkbox"
                        className="me-4"
                        checked={isFinishedShown === '1'}

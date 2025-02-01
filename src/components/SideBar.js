@@ -62,27 +62,27 @@ export default () => {
             <img className="hambur-icon" src={hamburIcon} onClick={() => { setIsExpanded(!isExpanded) }}></img>
         </div>
         <div className={isExpanded ? "sidebar-linklist-area active" : "sidebar-linklist-area"}>
-            <Link to="/admin/param" className="sidebar-link-item">
+            <Link to="/admin/param" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={paramIcon}></img>
                 <span>基本資料設定</span>
             </Link>
-            <Link to="/admin/order" className="sidebar-link-item">
+            <Link to="/admin/order" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={cartIcon}></img>
                 <span>訂單管理系統</span>
             </Link>
-            <Link to="/admin/productCategory" className="sidebar-link-item">
+            <Link to="/admin/productCategory" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={paperBoxIcon}></img>
                 <span>商品類別設定</span>
             </Link>
-            <Link to="/admin/product" className="sidebar-link-item">
+            <Link to="/admin/product" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={paperBoxIcon}></img>
                 <span>商品管理系統</span>
             </Link>
-            <Link to="/admin/question" className="sidebar-link-item">
+            <Link to="/admin/question" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={conversationIcon}></img>
                 <span>常見問答設定</span>
             </Link>
-            <Link to="/admin/banner" className="sidebar-link-item">
+            <Link to="/admin/banner" className="sidebar-link-item" onClick={() => {setIsExpanded(false)}}>
                 <img className="sidebar-link-item-img" src={imageIcon}></img>
                 <span>首頁輪播設定</span>
             </Link>
