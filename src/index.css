@@ -186,8 +186,15 @@ code {
 .main-conteant-footer {
   margin: auto 2rem 2rem 1rem;
   padding-top: 2rem;
+  padding-bottom: 2rem;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 992px) {
+  .main-conteant-footer {
+    margin: auto 2rem 2rem 2rem;
+  }
 }
 
 /* 登入頁面 */
