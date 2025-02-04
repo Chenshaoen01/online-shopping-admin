@@ -132,15 +132,21 @@ export default () => {
                     <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已出貨") }}>已出貨</button>
                     <button type="button" className="button-primary me-3" onClick={() => { changeOrderStatus("已完成") }}>已完成</button>
                 </div>
-                <label className="mt-2 md:mt-0">
-                   <input name="is_active" type="checkbox"
-                       className="me-4"
-                       checked={isFinishedShown === '1'}
-                       onChange={(e) => { 
-                           setIsFinishedShown(e.target.checked? '1' : '0')
-                       }}></input>
-                   <span className="form-title">是否顯示已完成訂單</span>
-                </label>
+                <label class="flex mt-2 md:mt-0 cursor-pointer">
+                   <input type="checkbox" checked={isFinishedShown === '1'}
+                          value="" className="sr-only peer"
+                          onChange={(e) => { 
+                            setIsFinishedShown(e.target.checked? '1' : '0')
+                        }}></input>
+                   <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full
+                                   peer dark:bg-gray-700 peer-checked:after:translate-x-full 
+                                   rtl:peer-checked:after:-translate-x-full
+                                 peer-checked:after:border-white after:content-[''] 
+                                   after:absolute after:top-[2px]  after:start-[2px] after:bg-white after:border-gray-300
+                                   after:border after:rounded-full after:h-5 after:w-5  after:transition-all dark:border-gray-600
+                                 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                   <span className="form-title ms-2">是否顯示已完成訂單</span>
+                 </label>
             </div>
         </div>
         <DataList MicroModal={MicroModal} modalName={modalName} columnList={columnList} mainIdColumnName={mainIdColumnName} dataList={dataList} dataListActions={dataListActions} setDataList={setDataList} getDetailData={getDetailData} />
