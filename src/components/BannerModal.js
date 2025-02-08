@@ -13,16 +13,24 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
 
     // 圖片 新增/刪除/上傳
     const [newImage, setNewImage] = useState(null)
-    const updateNewImage = (newImageFile) => {
+    const updateNewImage = useCallback((newImageFile) => {
         setNewImage({
             file: newImageFile,
             url: URL.createObjectURL(newImageFile)
         })
-    }
-    const uploadImage = useCallback(async () => {
+    }, [])
+
+    const [newMobileImage, setNewMobileImage] = useState(null)
+    const updateNewMobileImage = useCallback((newMobileImageFile) => {
+        setNewMobileImage({
+            file: newMobileImageFile,
+            url: URL.createObjectURL(newMobileImageFile)
+        })
+    }, [])
+    const uploadImage = useCallback(async (targetImage) => {
         let uploadResult = null
         const postFormData = new FormData()
-        postFormData.append('bannerImg', newImage.file)
+        postFormData.append('bannerImg', targetImage.file)
         LoadingPageShow()
         await axios.post(`${process.env.REACT_APP_API_URL}/banner/bannerImg`, postFormData, {
             headers: {
@@ -40,7 +48,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
             })
 
         return uploadResult
-    }, newImage)
+    })
 
     // 驗證
     const validate = useCallback(() => {
@@ -56,10 +64,11 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         }, [])
 
         // 新增圖片時檢查是否有上傳圖片
-        const imgValidateColumn = !isEdit && (newImage === "" || newImage === null) ? ["輪播圖片檔案"] : []
+        const imgValidateColumn = !isEdit && (newImage === "" || newImage === null) ? ["輪播圖片"] : []
+        const mobileImgValidateColumn = !isEdit && (newMobileImage === "" || newMobileImage === null) ? ["手機版輪播圖片"] : []
 
-        return [...inValidColumnList, ...imgValidateColumn]
-    }, [modalData, newImage])
+        return [...inValidColumnList, ...imgValidateColumn, ...mobileImgValidateColumn]
+    }, [modalData, newImage, newMobileImage])
 
     // 存檔
     const doSave = useCallback(async () => {
@@ -76,14 +85,19 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
         } else {
             let uploadResult = ""
             if (newImage !== null && newImage !== "") {
-                uploadResult = await uploadImage()
+                uploadResult = await uploadImage(newImage)
+            }
+
+            let mobileUploadResult = ""
+            if (newMobileImage !== null && newMobileImage !== "") {
+                mobileUploadResult = await uploadImage(newMobileImage)
             }
 
             LoadingPageShow()
             axios({
                 method: isEdit ? 'put' : 'post',
                 url: isEdit ? `${process.env.REACT_APP_API_URL}/banner/${modalData.banner_id}` : `${process.env.REACT_APP_API_URL}/banner`,
-                data: { ...modalData, new_banner_img: uploadResult },
+                data: { ...modalData, new_banner_img: uploadResult, new_mobile_banner_img: mobileUploadResult },
                 headers: {
                     'X-CSRF-TOKEN': localStorage.getItem('csrfToken')
                 }
@@ -93,6 +107,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 alertify.alert("", responseMessage? responseMessage : "儲存成功")
                 MicroModal.close("banner-modal")
                 setNewImage(null)
+                setNewMobileImage(null)
                 getDataList()
             })
             .catch(err => {
@@ -101,7 +116,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 alertify.alert("", responseMessage? responseMessage : "儲存失敗")
             })
         }
-    }, [modalData, newImage])
+    }, [modalData, newImage, newMobileImage])
 
     return <>
         <div className="modal micromodal-slide" id="banner-modal" aria-hidden="true">
@@ -128,7 +143,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                         </div>
                         {/* 圖片 */}
                         <div className="flex">
-                            <span className="me-2 required-column">輪播圖片檔案</span>
+                            <span className="me-2 required-column">輪播圖片</span>
                             <label>
                                 <span type="button" className="button-primary button-primary-lg px-4">上傳圖片</span>
                                 <input type="file" className="hidden" onChange={(e) => { updateNewImage(e.target.files[0]) }}></input>
@@ -139,6 +154,22 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                                 (newImage !== "" && newImage !== null) ?
                                     ((newImage !== "" && newImage !== null) && <img className="modal-sub-img-lg" src={newImage.url}></img>) :
                                     ((modalData.banner_img !== "" && modalData.banner_img !== null) && <img className="modal-sub-img-lg" src={`${process.env.REACT_APP_CLOUDEFLARE_PUBLIC_URL}/${modalData.banner_img}`}>
+                                    </img>)
+                            }
+                        </div>
+                        {/* 手機版圖片 */}
+                        <div className="flex mt-4">
+                            <span className="me-2 required-column">手機版輪播圖片</span>
+                            <label>
+                                <span type="button" className="button-primary button-primary-lg px-4">上傳圖片</span>
+                                <input type="file" className="hidden" onChange={(e) => { updateNewMobileImage(e.target.files[0]) }}></input>
+                            </label>
+                        </div>
+                        <div className="flex flex-wrap mt-4">
+                            {
+                                (newMobileImage !== "" && newMobileImage !== null) ?
+                                    ((newMobileImage !== "" && newMobileImage !== null) && <img className="modal-sub-img-lg" src={newMobileImage.url}></img>) :
+                                    ((modalData.mobile_banner_img !== "" && modalData.mobile_banner_img !== null) && <img className="modal-sub-img-lg" src={`${process.env.REACT_APP_CLOUDEFLARE_PUBLIC_URL}/${modalData.mobile_banner_img}`}>
                                     </img>)
                             }
                         </div>

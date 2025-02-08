@@ -38,6 +38,8 @@ export default () => {
             banner_link: "",
             banner_img: "",
             new_banner_img: "",
+            mobile_banner_img: "",
+            new_mobile_banner_img: "",
         }
         setModalData(emptyModalData)
     }
@@ -125,7 +127,7 @@ export default () => {
                     }}>新增輪播圖片</button>
             </div>
         </div>
-        <ImageCardList MicroModal={MicroModal} modalName={modalName} columnList={columnList} mainIdColumnName={mainIdColumnName} imgColumnName="banner_img" dataList={dataList} dataListActions={dataListActions} setDataList={setDataList} getDetailData={getDetailData} doDelete={doDelete} />
+        <ImageCardList MicroModal={MicroModal} modalName={modalName} columnList={columnList} mainIdColumnName={mainIdColumnName} imgColumnName="banner_img" mobileImgColumnName="mobile_banner_img" dataList={dataList} dataListActions={dataListActions} setDataList={setDataList} getDetailData={getDetailData} doDelete={doDelete} />
         <BannerModal MicroModal={MicroModal} modalData={modalData} setModalData={setModalData} isEdit={isEdit} getDataList={getDataList} />
         <PageButtonGroup lastPage={lastPage} pageButtonList={pageButtonList} currentPage={currentPage} setCurrentPage={setCurrentPage} getDataList={getDataList} />
     </>
