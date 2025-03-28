@@ -37,7 +37,7 @@ export default ({ modalData }) => {
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
                     <header className="modal__header">
                         <h2 className="modal__title" id="order-modal-title">
-                            常見問題設定
+                            訂單資訊查看
                         </h2>
                         <button className="modal__close" aria-label="Close modal" data-micromodal-close></button>
                     </header>

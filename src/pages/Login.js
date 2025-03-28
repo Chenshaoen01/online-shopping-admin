@@ -102,7 +102,7 @@ export default function Login() {
                                 </div>
                                 <label className="w-full flex flex-col mb-2">
                                     <span className="me-4 mb-0">電子信箱</span>
-                                    <span className="me-4 mb-2 whitespace-nowrap">(訪客帳號：admin-user@gmail.com)</span>
+                                    <span className="me-4 mb-2 whitespace-nowrap text-sm">(訪客帳號：admin-user@gmail.com)</span>
                                     <input
                                         type="text"
                                         value={email}
@@ -112,7 +112,7 @@ export default function Login() {
                                 </label>
                                 <label className="w-full flex flex-col mb-4">
                                     <span className="me-4 mb-0">密碼</span>
-                                    <span className="me-4 mb-2 whitespace-nowrap">(訪客密碼：123456)</span>
+                                    <span className="me-4 mb-2 whitespace-nowrap text-sm">(訪客密碼：123456)</span>
                                     <input
                                         type="password"
                                         value={password}

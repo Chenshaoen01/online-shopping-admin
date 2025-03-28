@@ -190,7 +190,7 @@ export default ({ MicroModal, modalData, setModalData, isEdit, getDataList }) =>
                 <div className="modal__container" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
                     <header className="modal__header">
                         <h2 className="modal__title" id="product-modal-title">
-                            商品編輯
+                            商品設定
                         </h2>
                         <button className="modal__close" aria-label="Close modal" data-micromodal-close></button>
                     </header>
